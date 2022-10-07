@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <script src="./scripts/script.js" defer></script>
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <section class="header">
+            <h1 class="app-title">Simple Weather App</h1>
+            <form class="controls" id="controlsForm">
+                <input id="searchInput" class="search-input" type="text" placeholder="Search for the city">
+                <button id="searchButton" class="btn btn-danger search-btn"
+                    style="--bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .85rem;">Search</button>
+                <span class="message" id="message"></span>
+            </form>
+        </section>
+        <section class="main-section">
+            <div class="main-container">
+                <ul class="cities" id="list"></ul>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
