@@ -12,21 +12,21 @@
 </head>
 
 <body>
-    <div class="app-wrapper">
-        <section class="header">
-            <h1 class="app-title">Simple Weather App</h1>
-            <form class="controls" id="controlsForm">
-                <input id="searchInput" class="search-input" type="text" placeholder="Search for the city">
-                <button id="searchButton" class="btn btn-danger search-btn">Search</button>
+    <section class="header">
+        <div class="container">
+            <h1 class="heading">Simple Weather App</h1>
+            <form id="form">
+                <input type="text" placeholder="Search for a city" autofocus id="searchInput">
+                <button type="submit">SUBMIT</button>
                 <span class="message" id="message"></span>
             </form>
-        </section>
-        <section class="main-section">
-            <div class="main-container">
-                <ul class="cities" id="list"></ul>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
+    <section class="main-section">
+        <div class="container">
+            <ul class="cities" id="list"></ul>
+        </div>
+    </section>
 </body>
 
 </html>

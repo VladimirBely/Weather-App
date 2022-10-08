@@ -1,4 +1,4 @@
-const form = document.getElementById('controlsForm');
+const form = document.getElementById('form');
 const message = document.getElementById('message');
 const searchInput = document.getElementById('searchInput');
 const list = document.getElementById('list');
@@ -7,7 +7,6 @@ const deleteIcon = document.createElement('img');
 let inputValue;
 let markup;
 const apiKey = '818a8035fcf142c168c15d0f1d89529a';
-
 
 
 async function getFetchRequest(url) {
