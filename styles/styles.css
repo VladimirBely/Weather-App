@@ -106,6 +106,7 @@ body {
     left: 0;
     max-width: 450px;
     min-height: 40px;
+    color: yellow;
 }
 
 @media screen and (max-width: 700px) {
@@ -126,7 +127,7 @@ body {
         position: static;
         max-width: none;
         min-height: 0;
-        margin-top: 10px;
+        margin-top: 15px;
     }
 }
 

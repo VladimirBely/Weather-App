@@ -9,61 +9,69 @@ let markup;
 const apiKey = '818a8035fcf142c168c15d0f1d89529a';
 
 
-async function getFetchRequest(url) {
-    const response = await fetch(url);
-    if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        const { main, name, sys, weather } = data;
-        const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@2x.png`;
-        li = document.createElement("li");
-        li.classList.add("city");
-        markup = `
-        <h2 class="city-name" data-name="${name},${sys.country}">
-        <span>${name}</span>
-        <sup>${sys.country}</sup>
-        </h2>
-        <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup>
-        </div>
-        <figure>
-        <img class="city-icon" src=${icon} alt=${weather[0]["main"]}>
-        <figcaption>${weather[0]["description"]}</figcaption>
-        </figure>`;
-        li.innerHTML = markup;
-        list.appendChild(li);
-
-    } else {
-        console.log(response.status, response.statusText);
+async function getFetchRequest() {
+    inputValue = searchInput.value;
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
+    if (!response.ok) {
+        if (inputValue === '') {
+            message.textContent = 'Name of a city cannot be an empty string!';
+        } else if (!isNaN(inputValue)) {
+            message.textContent = 'Name of the city cannot be a number!';
+        } else {
+            message.textContent = "Please search for valid city";
+        }
     }
+    const data = await response.json();
+    return data;
+}
+
+function addCity(data) {
+    const { main, name, sys, weather } = data;
+    const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@2x.png`;
+    li = document.createElement("li");
+    li.classList.add("city");
+    markup = `
+            <h2 class="city-name" data-name="${name},${sys.country}">
+            <span>${name}</span>
+            <sup>${sys.country}</sup>
+            </h2>
+            <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup>
+            </div>
+            <figure>
+            <img class="city-icon" src=${icon} alt=${weather[0]["main"]}>
+            <figcaption>${weather[0]["description"]}</figcaption>
+            </figure>`;
+    li.innerHTML = markup;
+    list.appendChild(li);
 }
 
 function clearForm() {
     setTimeout(() => {
         message.textContent = '';
-    }, 3000);
+    }, 4000);
     form.reset();
     searchInput.focus();
 }
 
-async function getWeatherData(url) {
-    await getFetchRequest(url)
-        .catch(() => {
-            if (inputValue === '') {
-                message.textContent = 'Name of a city cannot be an empty string!';
-            } else if (!isNaN(inputValue)) {
-                message.textContent = 'Name of the city cannot be a number!';
-            } else {
-                message.textContent = "Please search for valid city";
-            }
-        });
+async function checkDublicats() {
+    let data = await getFetchRequest();
+    const cityNames = list.querySelectorAll(' .city-name span');
+    const cityNamesArr = Array.from(cityNames);
+
+    let result = cityNamesArr.map(name => name.innerHTML);
+    if (result.includes(data.name)) {
+        message.textContent = `You already know the weather for city ${data.name}`;
+    } else {
+        addCity(data);
+    }
 }
 
 form.addEventListener("submit", event => {
     event.preventDefault();
-    inputValue = searchInput.value;
-    getWeatherData(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
+    checkDublicats();
     clearForm();
 });
+
 
 
 //** Find a way to get li */
