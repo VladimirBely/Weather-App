@@ -12,17 +12,24 @@ const apiKey = '818a8035fcf142c168c15d0f1d89529a';
 async function getFetchRequest() {
     inputValue = searchInput.value;
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
+    const data = await handleErrors(response);
+    return data;
+}
+
+function handleErrors(response) {
     if (!response.ok) {
         if (inputValue === '') {
-            message.textContent = 'Name of a city cannot be an empty string!';
+            let error = message.textContent = 'Name of a city cannot be an empty string!';
+            return Promise.reject(error);
         } else if (!isNaN(inputValue)) {
-            message.textContent = 'Name of the city cannot be a number!';
+            let error = message.textContent = 'Name of the city cannot be a number!';
+            return Promise.reject(error);
         } else {
-            message.textContent = "Please search for valid city";
+            let error = message.textContent = "Please search for valid city";
+            return Promise.reject(error);
         }
     }
-    const data = await response.json();
-    return data;
+    return response.json();
 }
 
 function addCity(data) {
@@ -71,9 +78,6 @@ form.addEventListener("submit", event => {
     checkDublicats();
     clearForm();
 });
-
-
-
 //** Find a way to get li */
 
 // list.addEventListener('click', event => {
