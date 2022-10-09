@@ -11,23 +11,25 @@ const apiKey = '818a8035fcf142c168c15d0f1d89529a';
 
 async function getFetchRequest() {
     inputValue = searchInput.value;
+    if (!inputValue) {
+        message.textContent = "Name of the city cannot be an empty string!";
+        return;
+    }
+    if (!isNaN(inputValue)) {
+        message.textContent = "Name of the city cannot be a number!";
+        return;
+    }
+
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
-    const data = await handleErrors(response);
+    const data = await handelError(response);
+    console.log(data);
     return data;
 }
 
-function handleErrors(response) {
+function handelError(response) {
     if (!response.ok) {
-        if (inputValue === '') {
-            let error = message.textContent = 'Name of a city cannot be an empty string!';
-            return Promise.reject(error);
-        } else if (!isNaN(inputValue)) {
-            let error = message.textContent = 'Name of the city cannot be a number!';
-            return Promise.reject(error);
-        } else {
-            let error = message.textContent = "Please search for valid city";
-            return Promise.reject(error);
-        }
+        message.textContent = "Please search for valid city";
+        return;
     }
     return response.json();
 }
@@ -62,12 +64,13 @@ function clearForm() {
 
 async function checkDublicats() {
     let data = await getFetchRequest();
+    if (!data) return;
     const cityNames = list.querySelectorAll(' .city-name span');
     const cityNamesArr = Array.from(cityNames);
-
     let result = cityNamesArr.map(name => name.innerHTML);
     if (result.includes(data.name)) {
         message.textContent = `You already know the weather for city ${data.name}`;
+        return;
     } else {
         addCity(data);
     }
@@ -78,6 +81,8 @@ form.addEventListener("submit", event => {
     checkDublicats();
     clearForm();
 });
+
+
 //** Find a way to get li */
 
 // list.addEventListener('click', event => {
