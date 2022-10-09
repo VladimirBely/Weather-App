@@ -22,7 +22,6 @@ async function getFetchRequest() {
 
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
     const data = await handelError(response);
-    console.log(data);
     return data;
 }
 
@@ -62,7 +61,7 @@ function clearForm() {
     searchInput.focus();
 }
 
-async function checkDublicats() {
+async function checkDublicates() {
     let data = await getFetchRequest();
     if (!data) return;
     const cityNames = list.querySelectorAll(' .city-name span');
@@ -78,33 +77,37 @@ async function checkDublicats() {
 
 form.addEventListener("submit", event => {
     event.preventDefault();
-    checkDublicats();
+    checkDublicates();
     clearForm();
 });
 
+list.addEventListener('click', event => {
+    const target = event.target;
+    if (target.classList.contains('city')) {
+        target.classList.toggle('rotate');
+        if (target.classList.contains('rotate')) {
+            setTimeout(() => {
+                deleteIcon.src = './images/trash-bin.png';
+                deleteButton.classList.add('delete-btn');
+                deleteButton.append(deleteIcon);
+                target.innerHTML = '';
+                target.append(deleteButton);
+            }, 380);
+        } else {
+            setTimeout(() => {
+                event.target.innerHTML = markup;
+            }, 380);
+        }
+    }
+});
 
-//** Find a way to get li */
-
-// list.addEventListener('click', event => {
-//     let target = event.target;
-//     const li = document.querySelector('.city');
-//     console.log(li);
-
-//     if (target !== li) return;
-
-//     li.classList.toggle('rotate');
-//     if (li.classList.contains('rotate')) {
-//         deleteIcon.src = './images/trash-bin.png';
-//         deleteButton.classList.add('delete-btn');
-//         deleteButton.append(deleteIcon);
-//         li.innerHTML = '';
-//         li.append(deleteButton);
-//     } else {
-//         setTimeout(() => {
-//             li.innerHTML = markup;
-//         }, 500);
-
-//     }
+// deleteButton.addEventListener('click', () => {
+//     const cities = document.querySelectorAll('.city');
+//     const citiesArr = Array.from(cities);
+//     console.log(citiesArr);
+//     citiesArr.forEach(city => {
+//         if (city.classList.contains('rotate')) {
+//             city.remove();
+//         }
+//     });
 // });
-
-// deleteButton.addEventListener('click', event => { });

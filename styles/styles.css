@@ -8,7 +8,9 @@
     --orange: #ff8c00;
 }
 
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -175,6 +177,8 @@ body {
     min-width: 210px;
     width: 100%;
     text-align: center;
+    transition: transform 1.5s;
+    height: 390px;
 }
 
 .main-section .city::after {
@@ -218,4 +222,30 @@ body {
     margin-top: 10px;
     width: 100px;
     height: 100px;
+}
+
+.rotate {
+    transform: rotateY(3.142rad);
+}
+
+.delete-btn {
+    width: 100px;
+    height: 100px;
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    position: absolute;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+    transition: all 0.4s;
+    box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+}
+
+.delete-btn:hover {
+    transform: scale(1.05);
+}
+
+.delete-btn:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
