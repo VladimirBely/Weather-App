@@ -61,8 +61,6 @@ function handleResponseError(response) {
     }
 })();
 
-
-
 function addCityToLS(data) {
     if (!data) return;
     if (!citiesArr) citiesArr = [];
@@ -142,4 +140,11 @@ list.addEventListener('click', event => {
     }
 });
 
-deleteButton.addEventListener('click', () => { });
+deleteButton.addEventListener('click', () => {
+    let rotatedCity = list.querySelector('.rotate');
+    if (rotatedCity) {
+        let cityName = rotatedCity.querySelector('h2 span').innerHTML;
+        citiesArr = citiesArr.filter(city => city.name !== cityName);
+        LS.setItem('Cities', JSON.stringify(citiesArr));
+    }
+});
