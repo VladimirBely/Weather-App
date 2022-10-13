@@ -52,11 +52,19 @@ function handleResponseError(response) {
     return response.json();
 }
 
+(function getCity() {
+    citiesArr = JSON.parse(LS.getItem('Cities'));
+    if (citiesArr) {
+        citiesArr.forEach(city => {
+            addCity(city);
+        });
+    }
+})();
+
+
 function addCityToLS(data) {
     if (!data) return;
-    citiesArr = JSON.parse(LS.getItem('Cities'));
-    if (citiesArr === null) citiesArr = [];
-    LS.setItem('city', JSON.stringify(data));
+    if (!citiesArr) citiesArr = [];
     citiesArr.push(data);
     LS.setItem('Cities', JSON.stringify(citiesArr));
 }
@@ -78,7 +86,6 @@ function addCity(data) {
             </figure>`;
     li.innerHTML = markup;
     list.appendChild(li);
-    addCityToLS(data);
 }
 
 function clearForm() {
@@ -100,6 +107,7 @@ async function checkDublicates() {
         return;
     } else {
         addCity(data);
+        addCityToLS(data);
     }
 }
 
