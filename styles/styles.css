@@ -213,6 +213,7 @@ body {
 
 .main-section .city-name sup {
     padding: 0.2em 0.6em;
+    vertical-align: -webkit-baseline-middle;
     border-radius: 30px;
     color: var(--text_light);
     background: var(--orange);

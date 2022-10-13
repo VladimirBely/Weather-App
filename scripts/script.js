@@ -62,6 +62,7 @@ function handleResponseError(response) {
 })();
 
 
+
 function addCityToLS(data) {
     if (!data) return;
     if (!citiesArr) citiesArr = [];
@@ -74,6 +75,7 @@ function addCity(data) {
     li = document.createElement("li");
     li.classList.add("city");
     markup = `
+            <div class ="content">
             <h2 class="city-name">
             <span>${data.name}</span>
             <sup>${data.country}</sup>
@@ -83,7 +85,8 @@ function addCity(data) {
             <figure>
             <img class="city-icon" src=${icon} alt=${data.weather.main}>
             <figcaption>${data.weather.description}</figcaption>
-            </figure>`;
+            </figure>
+            </div>`;
     li.innerHTML = markup;
     list.appendChild(li);
 }
@@ -126,24 +129,17 @@ list.addEventListener('click', event => {
                 deleteIcon.src = './images/trash-bin.png';
                 deleteButton.classList.add('delete-btn');
                 deleteButton.append(deleteIcon);
-                target.innerHTML = '';
+                target.querySelector('.city .content').style.display = 'none';
                 target.append(deleteButton);
+                deleteButton.style.display = 'block';
             }, 380);
         } else {
             setTimeout(() => {
-                event.target.innerHTML = markup;
+                target.querySelector('.city .content').style.display = 'block';
+                deleteButton.style.display = 'none';
             }, 380);
         }
     }
 });
 
-// deleteButton.addEventListener('click', () => {
-//     const cities = document.querySelectorAll('.city');
-//     const citiesArr = Array.from(cities);
-//     console.log(citiesArr);
-//     citiesArr.forEach(city => {
-//         if (city.classList.contains('rotate')) {
-//             city.remove();
-//         }
-//     });
-// });
+deleteButton.addEventListener('click', () => { });
