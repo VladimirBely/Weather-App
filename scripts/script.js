@@ -4,15 +4,13 @@ const searchInput = document.getElementById('searchInput');
 const list = document.getElementById('list');
 const deleteButton = document.createElement('button');
 const deleteIcon = document.createElement('img');
-let inputValue;
-let markup;
 let LS = localStorage;
 let citiesArr = [];
 const apiKey = '818a8035fcf142c168c15d0f1d89529a';
 
 
 async function getFetchData() {
-    inputValue = searchInput.value;
+    const inputValue = searchInput.value;
 
     if (!validateInput(inputValue)) return;
 
@@ -146,5 +144,6 @@ deleteButton.addEventListener('click', () => {
         let cityName = rotatedCity.querySelector('h2 span').innerHTML;
         citiesArr = citiesArr.filter(city => city.name !== cityName);
         LS.setItem('Cities', JSON.stringify(citiesArr));
+        rotatedCity.remove();
     }
 });
