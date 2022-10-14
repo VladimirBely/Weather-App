@@ -59,7 +59,7 @@ body {
 }
 
 .header .container {
-    max-width: 1200px;
+    max-width: 1250px;
     margin: 0 auto;
 }
 
@@ -138,13 +138,13 @@ body {
 }
 
 .main-section .container {
-    max-width: 1200px;
+    max-width: 1250px;
     margin: 0 auto;
 }
 
 .main-section .cities {
     display: grid;
-    grid-gap: 32px 20px;
+    grid-gap: 72px 30px;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
 }
@@ -213,6 +213,7 @@ body {
 
 .main-section .city-name sup {
     padding: 0.2em 0.6em;
+    vertical-align: -webkit-baseline-middle;
     border-radius: 30px;
     color: var(--text_light);
     background: var(--orange);

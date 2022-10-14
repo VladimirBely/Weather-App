@@ -4,28 +4,45 @@ const searchInput = document.getElementById('searchInput');
 const list = document.getElementById('list');
 const deleteButton = document.createElement('button');
 const deleteIcon = document.createElement('img');
-let inputValue;
-let markup;
+let LS = localStorage;
+let citiesArr = [];
 const apiKey = '818a8035fcf142c168c15d0f1d89529a';
 
 
-async function getFetchRequest() {
-    inputValue = searchInput.value;
-    if (!inputValue) {
+async function getFetchData() {
+    const inputValue = searchInput.value;
+
+    if (!validateInput(inputValue)) return;
+
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
+    const data = await handleResponseError(response);
+    if (!data) return;
+
+    const { main, name, sys, weather } = data;
+    const cityObj = {
+        name,
+        country: sys.country,
+        temperature: Math.round(main.temp),
+        weather: weather[0]
+    };
+
+    console.log(cityObj);
+    return cityObj;
+}
+
+function validateInput(value) {
+    if (!value) {
         message.textContent = "Name of the city cannot be an empty string!";
         return;
     }
-    if (!isNaN(inputValue)) {
+    if (!isNaN(value)) {
         message.textContent = "Name of the city cannot be a number!";
         return;
     }
-
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`);
-    const data = await handelError(response);
-    return data;
+    return value;
 }
 
-function handelError(response) {
+function handleResponseError(response) {
     if (!response.ok) {
         message.textContent = "Please search for valid city";
         return;
@@ -33,22 +50,39 @@ function handelError(response) {
     return response.json();
 }
 
+(function getCity() {
+    citiesArr = JSON.parse(LS.getItem('Cities'));
+    if (citiesArr) {
+        citiesArr.forEach(city => {
+            addCity(city);
+        });
+    }
+})();
+
+function addCityToLS(data) {
+    if (!data) return;
+    if (!citiesArr) citiesArr = [];
+    citiesArr.push(data);
+    LS.setItem('Cities', JSON.stringify(citiesArr));
+}
+
 function addCity(data) {
-    const { main, name, sys, weather } = data;
-    const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@2x.png`;
+    const icon = `https://openweathermap.org/img/wn/${data.weather["icon"]}@2x.png`;
     li = document.createElement("li");
     li.classList.add("city");
     markup = `
-            <h2 class="city-name" data-name="${name},${sys.country}">
-            <span>${name}</span>
-            <sup>${sys.country}</sup>
+            <div class ="content">
+            <h2 class="city-name">
+            <span>${data.name}</span>
+            <sup>${data.country}</sup>
             </h2>
-            <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup>
+            <div class="city-temp">${data.temperature}<sup>°C</sup>
             </div>
             <figure>
-            <img class="city-icon" src=${icon} alt=${weather[0]["main"]}>
-            <figcaption>${weather[0]["description"]}</figcaption>
-            </figure>`;
+            <img class="city-icon" src=${icon} alt=${data.weather.main}>
+            <figcaption>${data.weather.description}</figcaption>
+            </figure>
+            </div>`;
     li.innerHTML = markup;
     list.appendChild(li);
 }
@@ -62,7 +96,7 @@ function clearForm() {
 }
 
 async function checkDublicates() {
-    let data = await getFetchRequest();
+    let data = await getFetchData();
     if (!data) return;
     const cityNames = list.querySelectorAll(' .city-name span');
     const cityNamesArr = Array.from(cityNames);
@@ -72,6 +106,7 @@ async function checkDublicates() {
         return;
     } else {
         addCity(data);
+        addCityToLS(data);
     }
 }
 
@@ -90,24 +125,25 @@ list.addEventListener('click', event => {
                 deleteIcon.src = './images/trash-bin.png';
                 deleteButton.classList.add('delete-btn');
                 deleteButton.append(deleteIcon);
-                target.innerHTML = '';
+                target.querySelector('.city .content').style.display = 'none';
                 target.append(deleteButton);
+                deleteButton.style.display = 'block';
             }, 380);
         } else {
             setTimeout(() => {
-                event.target.innerHTML = markup;
+                target.querySelector('.city .content').style.display = 'block';
+                deleteButton.style.display = 'none';
             }, 380);
         }
     }
 });
 
-// deleteButton.addEventListener('click', () => {
-//     const cities = document.querySelectorAll('.city');
-//     const citiesArr = Array.from(cities);
-//     console.log(citiesArr);
-//     citiesArr.forEach(city => {
-//         if (city.classList.contains('rotate')) {
-//             city.remove();
-//         }
-//     });
-// });
+deleteButton.addEventListener('click', () => {
+    let rotatedCity = list.querySelector('.rotate');
+    if (rotatedCity) {
+        let cityName = rotatedCity.querySelector('h2 span').innerHTML;
+        citiesArr = citiesArr.filter(city => city.name !== cityName);
+        LS.setItem('Cities', JSON.stringify(citiesArr));
+        rotatedCity.remove();
+    }
+});
