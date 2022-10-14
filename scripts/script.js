@@ -116,29 +116,52 @@ form.addEventListener("submit", event => {
     clearForm();
 });
 
+function resetCities(target) {
+    const cities = list.querySelectorAll('.city');
+    cities.forEach(city => {
+        if (city !== target) {
+            city.classList.remove('rotate');
+        }
+    });
+}
+
+function rotateCity(target) {
+    setTimeout(() => {
+        deleteIcon.src = './images/trash-bin.png';
+        deleteButton.classList.add('delete-btn');
+        deleteButton.append(deleteIcon);
+        target.querySelector('.city .content').classList.add('hide');
+        target.append(deleteButton);
+        deleteButton.style.display = 'block';
+    }, 380);
+}
+
+function resetCity() {
+    setTimeout(() => {
+        const contents = document.querySelectorAll('.city .content');
+        contents.forEach(content => {
+            content.classList.remove('hide');
+        });
+        deleteButton.style.display = 'none';
+    }, 380);
+}
+
 list.addEventListener('click', event => {
     const target = event.target;
+    if (!target) return;
     if (target.classList.contains('city')) {
         target.classList.toggle('rotate');
         if (target.classList.contains('rotate')) {
-            setTimeout(() => {
-                deleteIcon.src = './images/trash-bin.png';
-                deleteButton.classList.add('delete-btn');
-                deleteButton.append(deleteIcon);
-                target.querySelector('.city .content').style.display = 'none';
-                target.append(deleteButton);
-                deleteButton.style.display = 'block';
-            }, 380);
+            resetCities(target);
+            rotateCity(target);
         } else {
-            setTimeout(() => {
-                target.querySelector('.city .content').style.display = 'block';
-                deleteButton.style.display = 'none';
-            }, 380);
+            resetCities(target);
+            resetCity();
         }
     }
 });
 
-deleteButton.addEventListener('click', () => {
+function deleteCity() {
     let rotatedCity = list.querySelector('.rotate');
     if (rotatedCity) {
         let cityName = rotatedCity.querySelector('h2 span').innerHTML;
@@ -146,4 +169,8 @@ deleteButton.addEventListener('click', () => {
         LS.setItem('Cities', JSON.stringify(citiesArr));
         rotatedCity.remove();
     }
+}
+
+deleteButton.addEventListener('click', () => {
+    deleteCity();
 });
