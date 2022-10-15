@@ -121,6 +121,7 @@ function resetCities(target) {
     cities.forEach(city => {
         if (city !== target) {
             city.classList.remove('rotate');
+            resetCity();
         }
     });
 }
@@ -130,7 +131,7 @@ function rotateCity(target) {
         deleteIcon.src = './images/trash-bin.png';
         deleteButton.classList.add('delete-btn');
         deleteButton.append(deleteIcon);
-        target.querySelector('.city .content').classList.add('hide');
+        target.querySelector('.content').classList.add('hide');
         target.append(deleteButton);
         deleteButton.style.display = 'block';
     }, 380);
@@ -148,7 +149,6 @@ function resetCity() {
 
 list.addEventListener('click', event => {
     const target = event.target;
-    if (!target) return;
     if (target.classList.contains('city')) {
         target.classList.toggle('rotate');
         if (target.classList.contains('rotate')) {
@@ -156,7 +156,6 @@ list.addEventListener('click', event => {
             rotateCity(target);
         } else {
             resetCities(target);
-            resetCity();
         }
     }
 });
