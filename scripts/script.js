@@ -8,24 +8,6 @@ let LS = localStorage;
 let citiesArr = [];
 const apiKey = "818a8035fcf142c168c15d0f1d89529a";
 
-async function getData() {
-  const inputValue = searchInput.value;
-  const data = await getFetchData(inputValue);
-  return data;
-}
-
-(function showData() {
-  citiesArr = JSON.parse(LS.getItem("Cities"));
-  if (citiesArr) {
-    citiesArr.forEach(async (city) => {
-      const cityName = city.name;
-      const data = await getFetchData(cityName);
-      if (citiesArr.includes(cityName)) updateLS(data);
-      updateDOM(city);
-    });
-  }
-})();
-
 async function getFetchData(value) {
   if (!validateInput(value)) return;
 
@@ -43,9 +25,28 @@ async function getFetchData(value) {
     weather: weather[0],
   };
 
-  //   console.log(cityObj);
   return cityObj;
 }
+
+async function getData() {
+  const inputValue = searchInput.value;
+  const data = await getFetchData(inputValue);
+  return data;
+}
+
+(function updateData() {
+  const citiesArr = JSON.parse(LS.getItem("Cities"));
+  console.log(citiesArr);
+  if (citiesArr) {
+    citiesArr.forEach(async (city) => {
+      const cityName = city.name;
+      const data = await getFetchData(cityName);
+      citiesArr.length = 0;
+      updateLS(data);
+      updateDOM(city);
+    });
+  }
+})();
 
 function validateInput(value) {
   if (!value) {
@@ -66,15 +67,6 @@ function handleResponseError(response) {
   }
   return response.json();
 }
-
-// (function showData() {
-//   citiesArr = JSON.parse(LS.getItem("Cities"));
-//   if (citiesArr) {
-//     citiesArr.forEach((city) => {
-//       updateDOM(city);
-//     });
-//   }
-// })();
 
 function updateLS(data) {
   if (!data) return;
@@ -173,6 +165,7 @@ list.addEventListener("click", (event) => {
       rotateElement(target);
     } else {
       resetElements(target);
+      resetContent();
     }
   }
 });
