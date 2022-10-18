@@ -34,7 +34,9 @@ async function getData() {
   return data;
 }
 
-(function updateData() {
+document.addEventListener("DOMContentLoaded", updateData);
+
+function updateData() {
   const citiesArr = JSON.parse(LS.getItem("Cities"));
   console.log(citiesArr);
   if (citiesArr) {
@@ -46,7 +48,7 @@ async function getData() {
       updateDOM(city);
     });
   }
-})();
+}
 
 function validateInput(value) {
   if (!value) {
