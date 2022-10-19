@@ -34,7 +34,7 @@ async function getData() {
   return data;
 }
 
-document.addEventListener("DOMContentLoaded", updateData);
+window.onload = updateData();
 
 function updateData() {
   const citiesArr = JSON.parse(LS.getItem("Cities"));
