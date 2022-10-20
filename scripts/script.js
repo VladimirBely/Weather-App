@@ -11,9 +11,7 @@ const apiKey = "818a8035fcf142c168c15d0f1d89529a";
 async function getFetchData(value) {
   if (!validateInput(value)) return;
 
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${value}&appid=${apiKey}&units=metric`
-  );
+  const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${value}&appid=${apiKey}&units=metric`);
   const data = await handleResponseError(response);
   if (!data) return;
 
@@ -38,11 +36,9 @@ window.onload = updateData();
 
 function updateData() {
   const citiesArr = JSON.parse(LS.getItem("Cities"));
-  console.log(citiesArr);
   if (citiesArr) {
     citiesArr.forEach(async (city) => {
-      const cityName = city.name;
-      const data = await getFetchData(cityName);
+      const data = await getFetchData(city.name);
       citiesArr.length = 0;
       updateLS(data);
       updateDOM(data);
@@ -77,16 +73,8 @@ function updateLS(data) {
   LS.setItem("Cities", JSON.stringify(citiesArr));
 }
 
-function updateDOMTest() {
-  const cityList = Array.from(list.querySelectorAll('.city'));
-  cityList.forEach(city => {
-
-  });
-
-}
-
 function updateDOM(data) {
-  const icon = `https://openweathermap.org/img/wn/${data.weather["icon"]}@2x.png`;
+  const icon = `https://openweathermap.org/img/wn/${data.weather["icon"]}@2x.png`;;
   li = document.createElement("li");
   li.classList.add("city");
   markup = `
@@ -104,14 +92,6 @@ function updateDOM(data) {
             </div>`;
   li.innerHTML = markup;
   list.appendChild(li);
-}
-
-function clearForm() {
-  setTimeout(() => {
-    message.textContent = "";
-  }, 4000);
-  form.reset();
-  searchInput.focus();
 }
 
 async function checkDublicates() {
@@ -133,7 +113,32 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
   checkDublicates();
   clearForm();
+
 });
+
+list.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.classList.contains("city")) {
+    target.classList.toggle("rotate");
+    if (target.classList.contains("rotate")) {
+      resetElements(target);
+      rotateElement(target);
+    } else {
+      resetElements(target);
+      resetContent();
+    }
+  }
+});
+
+deleteButton.addEventListener("click", deleteElement);
+
+function clearForm() {
+  setTimeout(() => {
+    message.textContent = "";
+  }, 4000);
+  form.reset();
+  searchInput.focus();
+}
 
 function resetElements(target) {
   const cities = list.querySelectorAll(".city");
@@ -166,20 +171,6 @@ function resetContent() {
   }, 380);
 }
 
-list.addEventListener("click", (event) => {
-  const target = event.target;
-  if (target.classList.contains("city")) {
-    target.classList.toggle("rotate");
-    if (target.classList.contains("rotate")) {
-      resetElements(target);
-      rotateElement(target);
-    } else {
-      resetElements(target);
-      resetContent();
-    }
-  }
-});
-
 function deleteElement() {
   let rotatedCity = list.querySelector(".rotate");
   if (rotatedCity) {
@@ -189,5 +180,3 @@ function deleteElement() {
     rotatedCity.remove();
   }
 }
-
-deleteButton.addEventListener("click", deleteElement);
