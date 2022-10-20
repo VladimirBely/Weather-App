@@ -45,7 +45,7 @@ function updateData() {
       const data = await getFetchData(cityName);
       citiesArr.length = 0;
       updateLS(data);
-      updateDOM(city);
+      updateDOM(data);
     });
   }
 }
@@ -75,6 +75,14 @@ function updateLS(data) {
   if (!citiesArr) citiesArr = [];
   citiesArr.push(data);
   LS.setItem("Cities", JSON.stringify(citiesArr));
+}
+
+function updateDOMTest() {
+  const cityList = Array.from(list.querySelectorAll('.city'));
+  cityList.forEach(city => {
+
+  });
+
 }
 
 function updateDOM(data) {
