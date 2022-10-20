@@ -79,6 +79,7 @@ function updateDOM(data) {
   li.classList.add("city");
   markup = `
             <div class ="content">
+            <span class="tooltip-text">To delete card click on it and click on delete button</span>
             <h2 class="city-name">
             <span>${data.name}</span>
             <sup>${data.country}</sup>
