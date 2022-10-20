@@ -179,11 +179,6 @@ body {
   text-align: center;
   transition: transform 1.5s;
   height: 390px;
-  transition: linear 0.3s;
-}
-
-.main-section .city:hover {
-  transform: scale(1.02);
 }
 
 .main-section .city::after {
@@ -260,35 +255,43 @@ body {
   display: none;
 }
 
-.city .tooltip-text {
-  visibility: hidden;
-  width: 200px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 103%;
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
+@media (hover: hover) {
+  .city .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 103%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .city .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  .city:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
-.city .tooltip-text::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-.city:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+@media (hover: none) {
+  .tooltip-text {
+    display: none;
+  }
 }
